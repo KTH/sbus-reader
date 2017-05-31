@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route id="se.kth.integral.ladok3.reader">
+      <from uri="amqp:queue:{{service_bus.queue}}" />
+      <to uri="log:se.kth.integral.ladok3.reader?level=DEBUG&amp;showHeaders=true" />
+      <idempotentConsumer messageIdRepositoryRef="messageRepo">
+        <header>JMSMessageID</header>
+        <to uri="file:/opt/data/events"/>
+      </idempotentConsumer>
+    </route>
+  </camelContext>
+
+  <errorHandler id="retryErrorHandler" type="DefaultErrorHandler"
+    xmlns="http://camel.apache.org/schema/spring">
+    <redeliveryPolicy maximumRedeliveries="-1"
+      retryAttemptedLogLevel="WARN" backOffMultiplier="2"
+      useExponentialBackOff="true" />
+  </errorHandler>
+
+  <!-- AMQP configuration -->
+  <bean id="prefetchPolicy" class="org.apache.qpid.jms.policy.JmsDefaultPrefetchPolicy">
+    <property name="all" value="${service_bus.prefetch:1}" />
+  </bean>
+  <bean scope="prototype" id="jmsConnectionFactory"
+    class="org.apache.qpid.jms.JmsConnectionFactory">
+    <!-- amqp.traceFrames=true turns on protocol debugging -->
+    <!-- amqp.idleTimeout=120000 is required by Service Bus -->
+    <property name="remoteURI"
+      value="amqps://${service_bus.uri}?amqp.idleTimeout=120000" />
+    <property name="username" value="${service_bus.user}" />
+    <property name="password" value="${service_bus.password}" />
+    <property name="prefetchPolicy" ref="prefetchPolicy" />
+    <!-- Issues with drain requests causes us to turn this on -->
+    <property name="receiveLocalOnly" value="true" />
+  </bean>
+
+  <bean scope="prototype" id="jmsCachingConnectionFactory"
+    class="org.springframework.jms.connection.CachingConnectionFactory">
+    <property name="targetConnectionFactory" ref="jmsConnectionFactory" />
+  </bean>
+  <bean scope="prototype" id="jmsConfig"
+    class="org.apache.camel.component.jms.JmsConfiguration">
+    <property name="connectionFactory" ref="jmsCachingConnectionFactory" />
+    <property name="cacheLevelName" value="CACHE_AUTO" />
+    <property name="acknowledgementModeName" value="CLIENT_ACKNOWLEDGE" />
+  </bean>
+
+  <!-- Jolokia monitor agent -->
+  <bean name="jolokia" id="jolokia"
+    class="org.jolokia.jvmagent.spring.SpringJolokiaAgent">
+    <property name="lookupConfig" value="false" />
+    <property name="systemPropertiesMode" value="never" />
+    <property name="config">
+      <bean class="org.jolokia.jvmagent.spring.SpringJolokiaConfigHolder">
+        <property name="config">
+          <map>
+            <entry key="autoStart" value="true" />
+            <entry key="host" value="0.0.0.0" />
+            <entry key="port" value="8181" />
+            <entry key="discoveryAgentUrl" value="/hawtio/jvm/connect?name=camel-#{'$'}{host}&amp;host=#{'$'}{host}&amp;port=8181&amp;path=jolokia" />
+            <entry key="agentDescription" value="Ladok3 Atom Feed Reader" />
+          </map>
+        </property>
+      </bean>
+    </property>
+  </bean>
+</beans>
