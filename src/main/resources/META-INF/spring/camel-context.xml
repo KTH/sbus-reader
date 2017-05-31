@@ -14,9 +14,9 @@
   <bean id="messageRepo" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository" />
 
   <camelContext xmlns="http://camel.apache.org/schema/spring">
-    <route id="se.kth.integral.ladok3.reader">
+    <route id="se.kth.integral.sbus.reader">
       <from uri="amqp:queue:{{service_bus.queue}}" />
-      <to uri="log:se.kth.integral.ladok3.reader?level=DEBUG&amp;showHeaders=true" />
+      <to uri="log:se.kth.integral.sbus.reader?level=DEBUG&amp;showHeaders=true" />
       <idempotentConsumer messageIdRepositoryRef="messageRepo">
         <header>JMSMessageID</header>
         <to uri="file:/opt/data/events"/>
@@ -72,7 +72,7 @@
             <entry key="host" value="0.0.0.0" />
             <entry key="port" value="8181" />
             <entry key="discoveryAgentUrl" value="/hawtio/jvm/connect?name=camel-#{'$'}{host}&amp;host=#{'$'}{host}&amp;port=8181&amp;path=jolokia" />
-            <entry key="agentDescription" value="Ladok3 Atom Feed Reader" />
+            <entry key="agentDescription" value="Service Bus Reader" />
           </map>
         </property>
       </bean>
