@@ -38,7 +38,7 @@ docker run --name=ladok3-reader \
 
 ## Development
 
-There is no souce code here, it's just a packaging and configuration of off-the-shelf
+There is no source code here, it's just a packaging and configuration of off-the-shelf
 Apache Camel components. So this is about Camel and nothing else currently.
 
 ## Building
