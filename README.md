@@ -1,5 +1,8 @@
 # ladok3-reader
 
+Application which reads events from a queue and writes them to a folder. Intended for use with the
+ladok3 atom feed, but can actually be used for any purpose as currently configured.
+
 ## Configuration
 
 The application starts with the class path `/run/secrets:/opt/data:/opt/camel`, and
