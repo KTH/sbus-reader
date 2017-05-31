@@ -1,7 +1,6 @@
-# ladok3-reader
+# sbus-reader
 
-Application which reads events from a queue and writes them to a folder. Intended for use with the
-ladok3 atom feed, but can actually be used for any purpose as currently configured.
+Application which reads events from a queue and writes them to a folder.
 
 ## Configuration
 
@@ -33,10 +32,10 @@ be combined.
 Given a file environment containing environment variables as mentioned above, the image can be run with docker run as in this example.
 
 ```
-docker run --name=ladok3-reader \
+docker run --name=sbus-reader \
     --env-file=environment \
     -v /opt/camel /opt/camel \
-    kthse/ladok3-reader:latest
+    kthse/sbus-reader:latest
 ```
 
 ## Development
@@ -54,4 +53,4 @@ A complete build of the image can be made with `mvn clean package docker:build`.
 Due to the need to access a private maven repository, you may be better off building
 the image from the integral-ug-multicast Jenkins project which has access to the
 private repository. Pre built images are available on public docker hub as
-kthse/ladok3-reader, see above.
+kthse/sbus-reader, see above.

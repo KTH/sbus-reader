@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>se.kth.integral</groupId>
-  <artifactId>ladok3-reader</artifactId>
+  <artifactId>sbus-reader</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1-RC1</version>
 
-  <name>KTH Integral ladok3 reader</name>
+  <name>KTH Integral Service Bus reader</name>
   <url>https://www.kth.se</url>
-  <description>A test route to read a queue with ladok3 messages and write them to files.</description>
+  <description>A test route to read a queue with messages from Service Bus and write them to files.</description>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

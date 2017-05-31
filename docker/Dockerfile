@@ -11,7 +11,7 @@ RUN apk --no-cache add bash
 # Jolokia management and discovery
 EXPOSE 8181 24884
 
-ADD ladok3-reader-*.jar /opt/camel/application.jar
+ADD sbus-reader-*.jar /opt/camel/application.jar
 ADD run.sh /opt/integral/run.sh
 RUN chmod +x /opt/integral/run.sh
 
