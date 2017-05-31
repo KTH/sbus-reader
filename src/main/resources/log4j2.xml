@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration packages="se.kth.infosys.log4j">
+  <Appenders>
+    <Console name="stdout" target="SYSTEM_OUT">
+      <BunyanLayout />
+    </Console>
+
+    <RollingFile name="file" fileName="camel.log" filePattern="camel.log.%i">
+      <SizeBasedTriggeringPolicy size="10MB"/>
+      <DefaultRolloverStrategy max="5"/>
+      <PatternLayout pattern="%d | %-5p | %.30c | %m | %t%n"/>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="se.kth.integral" level="INFO"/>  
+    <Logger name="se.kth.infosys" level="INFO"/>  
+    <Logger name="org.apache.camel" level="INFO"/>  
+    <Logger name="org.apache.qpid" level="INFO"/>  
+
+    <Root level="INFO">
+      <AppenderRef ref="stdout"/>
+      <AppenderRef ref="file"/>
+    </Root>
+  </Loggers>
+</Configuration>

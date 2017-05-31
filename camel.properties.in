@@ -1,0 +1,16 @@
+# Service bus configuration
+
+# The uri is not stricly a URI, but the "hostname" part including your
+# Service bus name space as found in the Azure portal.
+service_bus.uri=namespace.servicebus.windows.net
+
+# The user is known as a "policy" in the Azure portal.
+service_bus.user=
+
+# The password is any of the primary or secondary keys for the user,
+# found in the Azure portal.
+service_bus.password=
+
+# The queue to read from e.g queue/subscriptions/subscription if a topic.
+# Dound in the Azure portal.
+service_bus.queue=
