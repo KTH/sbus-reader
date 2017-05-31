@@ -7,6 +7,12 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+  <bean id="camel_properties" class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:camel.properties" />
+  </bean>
+
+  <bean id="messageRepo" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository" />
+
   <camelContext xmlns="http://camel.apache.org/schema/spring">
     <route id="se.kth.integral.ladok3.reader">
       <from uri="amqp:queue:{{service_bus.queue}}" />
