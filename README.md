@@ -1,6 +1,8 @@
 # sbus-reader
 
-Application which reads events from a queue and writes them to a folder.
+A Docker container which reads events from a Service Bus queue using AMQP (Apache Qpid) and
+writes them to a folder. The folder is /opt/data/events and data there can be accessed by
+mounting a volume to that path as per usual with docker.
 
 ## Configuration
 
@@ -9,9 +11,9 @@ looks for a file named camel.properties for configuration. This allows for a num
 of options on how to configure the application.
 
 1. You can use environment variables, which is used to create camel.properties in /opt/camel
-   when the container starts. There is a sceleton file in environment.in.
+   when the container starts. There is a skeleton file in environment.in.
 1. You can instead choose to use properties in either /opt/data, which can be made a volume
-   mount to some shared area. There is a sceleton file in camel.properties.in.
+   mount to some shared area. There is a skeleton file in camel.properties.in.
 1. Or you can use properties files in /run/secrets, using the new mechanism for secrets in Docker
    1.13.
 
@@ -34,7 +36,6 @@ Given a file environment containing environment variables as mentioned above, th
 ```
 docker run --name=sbus-reader \
     --env-file=environment \
-    -v /opt/camel /opt/camel \
     kthse/sbus-reader:latest
 ```
 
@@ -45,12 +46,5 @@ Apache Camel components. So this is about Camel and nothing else currently.
 
 ## Building
 
-Currently the build depends on libraries that are not available in public
-repositories.
-
 A complete build of the image can be made with `mvn clean package docker:build`.
-
-Due to the need to access a private maven repository, you may be better off building
-the image from the integral-ug-multicast Jenkins project which has access to the
-private repository. Pre built images are available on public docker hub as
-kthse/sbus-reader, see above.
+Pre built images are available on public docker hub as kthse/sbus-reader, see above.
