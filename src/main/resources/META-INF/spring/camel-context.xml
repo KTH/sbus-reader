@@ -58,6 +58,9 @@
     <property name="cacheLevelName" value="CACHE_AUTO" />
     <property name="acknowledgementModeName" value="CLIENT_ACKNOWLEDGE" />
   </bean>
+  <bean id="amqp" class="org.apache.camel.component.amqp.AMQPComponent">
+    <property name="configuration" ref="jmsConfig" />
+  </bean>
 
   <!-- Jolokia monitor agent -->
   <bean name="jolokia" id="jolokia"
