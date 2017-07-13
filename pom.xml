@@ -6,7 +6,7 @@
   <groupId>se.kth.integral</groupId>
   <artifactId>sbus-reader</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
   <name>KTH Integral Service Bus reader</name>
   <url>https://www.kth.se</url>
@@ -15,6 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <build>dev</build>
   </properties>
 
   <dependencyManagement>
@@ -130,20 +131,6 @@
         </configuration>
       </plugin>
 
-      <!-- to generate the MANIFEST-FILE of the bundle -->
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-            <Import-Package>*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -195,7 +182,7 @@
           <noCache>true</noCache>
           <imageTags>
             <imageTag>latest</imageTag>
-            <imageTag>${project.version}</imageTag>
+            <imageTag>${project.version}-${build}</imageTag>
             <imageTag>${git.commit.id.abbrev}</imageTag>
           </imageTags>
           <resources>
