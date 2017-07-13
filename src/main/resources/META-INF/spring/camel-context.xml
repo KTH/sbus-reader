@@ -44,6 +44,8 @@
     <property name="username" value="${service_bus.user}" />
     <property name="password" value="${service_bus.password}" />
     <property name="prefetchPolicy" ref="prefetchPolicy" />
+    <property name="sendTimeout" value="60000" />
+    <property name="requestTimeout" value="60000" />
     <!-- Issues with drain requests causes us to turn this on -->
     <property name="receiveLocalOnly" value="true" />
   </bean>
