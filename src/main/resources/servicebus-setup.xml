@@ -1,0 +1,40 @@
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- AMQP setup -->
+  <bean id="prefetchPolicy" class="org.apache.qpid.jms.policy.JmsDefaultPrefetchPolicy">
+    <property name="all" value="${service_bus.prefetch:1}"/>
+  </bean>
+  <bean id="redeliveryPolicy" class="org.apache.qpid.jms.policy.JmsDefaultRedeliveryPolicy">
+    <property name="maxRedeliveries" value="5"/>
+    <property name="outcome" value="2"/> <!-- rejected -->
+  </bean>
+  <bean id="jmsConnectionFactory" class="org.apache.qpid.jms.JmsConnectionFactory">
+    <!-- URI option amqp.idleTimeout=120000 is required by Service Bus -->
+    <!-- URI option amqp.traceFrames=true turns on protocol debugging -->
+    <property name="remoteURI" value="amqps://${service_bus.uri}?amqp.idleTimeout=120000" />
+    <property name="username" value="${service_bus.user}" />
+    <property name="password" value="${service_bus.password}" />
+    <property name="prefetchPolicy" ref="prefetchPolicy" />
+    <property name="redeliveryPolicy" ref="redeliveryPolicy"/>
+    <property name="sendTimeout" value="60000" />
+    <property name="requestTimeout" value="60000" />
+    <property name="awaitClientID" value="false" />
+    <!-- Recieve Local Only makes Service Bus connection behave reasonably -->
+    <property name="receiveLocalOnly" value="true" />
+  </bean>
+  <bean id="jmsSingleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+    <property name="targetConnectionFactory" ref="jmsConnectionFactory" />
+    <property name="reconnectOnException" value="true" />
+  </bean>
+  <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration" >
+    <property name="connectionFactory" ref="jmsSingleConnectionFactory" />
+    <property name="acknowledgementModeName" value="CLIENT_ACKNOWLEDGE" />
+  </bean>
+  <bean id="amqp" class="org.apache.camel.component.amqp.AMQPComponent">
+    <property name="configuration" ref="jmsConfig" />
+  </bean>
+</beans>
