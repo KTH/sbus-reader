@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.3
+
+Fix error handling as in other projects.
+
 ## 1.0.2
 
 * Use single connection factory.
