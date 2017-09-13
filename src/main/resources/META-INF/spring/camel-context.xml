@@ -13,6 +13,8 @@
 
   <bean id="messageRepo" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository" />
 
+  <import resource="classpath:servicebus-setup.xml"/>
+
   <camelContext xmlns="http://camel.apache.org/schema/spring">
     <route id="se.kth.integral.sbus.reader">
       <from uri="amqp:queue:{{service_bus.queue}}" />
@@ -26,39 +28,11 @@
 
   <errorHandler id="retryErrorHandler" type="DefaultErrorHandler"
     xmlns="http://camel.apache.org/schema/spring">
-    <redeliveryPolicy maximumRedeliveries="-1"
-      retryAttemptedLogLevel="WARN" backOffMultiplier="2"
-      useExponentialBackOff="true" />
+    <redeliveryPolicy maximumRedeliveries="6"
+                      redeliveryDelay="1000"
+                      retryAttemptedLogLevel="WARN"
+                      useExponentialBackOff="true"/>
   </errorHandler>
-
-  <!-- AMQP configuration -->
-  <bean id="prefetchPolicy" class="org.apache.qpid.jms.policy.JmsDefaultPrefetchPolicy">
-    <property name="all" value="${service_bus.prefetch:1}" />
-  </bean>
-  <bean id="jmsConnectionFactory" class="org.apache.qpid.jms.JmsConnectionFactory">
-    <!-- amqp.traceFrames=true turns on protocol debugging -->
-    <!-- amqp.idleTimeout=120000 is required by Service Bus -->
-    <property name="remoteURI" value="amqps://${service_bus.uri}?amqp.idleTimeout=120000" />
-    <property name="username" value="${service_bus.user}" />
-    <property name="password" value="${service_bus.password}" />
-    <property name="prefetchPolicy" ref="prefetchPolicy" />
-    <property name="sendTimeout" value="60000" />
-    <property name="requestTimeout" value="60000" />
-    <property name="awaitClientID" value="false" />
-    <!-- Issues with drain requests causes us to turn this on -->
-    <property name="receiveLocalOnly" value="true" />
-  </bean>
-  <bean id="jmsSingleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
-    <property name="targetConnectionFactory" ref="jmsConnectionFactory" />
-    <property name="reconnectOnException" value="true" />
-  </bean>
-  <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration" >
-    <property name="connectionFactory" ref="jmsSingleConnectionFactory" />
-    <property name="acknowledgementModeName" value="CLIENT_ACKNOWLEDGE" />
-  </bean>
-  <bean id="amqp" class="org.apache.camel.component.amqp.AMQPComponent">
-    <property name="configuration" ref="jmsConfig" />
-  </bean>
 
   <!-- Jolokia monitor agent -->
   <bean name="jolokia" id="jolokia"
