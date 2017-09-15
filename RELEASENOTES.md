@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.0.4
+
+Make last part of destination tunable, in order to make it possible 
+to write to, e.g., /opt/data/output instead of default /opt/data/events.
+
 ## 1.0.3
 
 Fix error handling as in other projects.
