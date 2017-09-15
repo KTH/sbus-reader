@@ -9,6 +9,8 @@ RUN apk --no-cache add bash
 # ENV SERVICE_BUS_QUEUE the-service-bus-queue
 
 # Jolokia management and discovery
+ENV DIRECTORY events
+
 EXPOSE 8181 24884
 
 ADD sbus-reader-*.jar /opt/camel/application.jar
