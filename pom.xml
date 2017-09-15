@@ -6,7 +6,7 @@
   <groupId>se.kth.integral</groupId>
   <artifactId>sbus-reader</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 
   <name>KTH Integral Service Bus reader</name>
   <url>https://www.kth.se</url>
