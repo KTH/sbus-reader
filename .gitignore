@@ -8,5 +8,5 @@
 /dependency-reduced-pom.xml
 /pom.xml.versionsBackup
 /camel.log
-/camel.properties
+/env.properties
 /src/main/resources/camel.properties

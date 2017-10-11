@@ -26,10 +26,19 @@
     <route id="se.kth.integral.sbus.reader">
       <from uri="amqp:queue:{{service_bus.queue}}" />
       <to uri="log:se.kth.integral.sbus.reader?level=DEBUG&amp;showHeaders=true" />
+
       <idempotentConsumer messageIdRepositoryRef="messageRepo">
         <header>JMSMessageID</header>
         <to uri="file:/opt/data/{{sbus_reader.directory}}"/>
       </idempotentConsumer>
+
+      <onCompletion onCompleteOnly="true">
+        <log message="Handled (${header.breadcrumbId})."/>
+      </onCompletion>
+
+      <onCompletion onFailureOnly="true">
+        <log loggingLevel="ERROR" message="Failed (${header.breadcrumbId})."/>
+      </onCompletion>
     </route>
   </camelContext>
 

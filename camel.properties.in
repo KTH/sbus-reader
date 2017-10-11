@@ -14,3 +14,6 @@ service_bus.password=
 # The queue to read from e.g queue/subscriptions/subscription if a topic.
 # Dound in the Azure portal.
 service_bus.queue=
+
+# Subdirectory where messages are written to in /opt/data.
+sbus_reader.directory=messages
